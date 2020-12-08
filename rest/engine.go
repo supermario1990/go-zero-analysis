@@ -21,14 +21,15 @@ const topCpuUsage = 1000
 
 var ErrSignatureConfig = errors.New("bad config for Signature")
 
+// rest apt 服务器实现
 type engine struct {
-	conf                 RestConf
-	routes               []featuredRoutes
-	unauthorizedCallback handler.UnauthorizedCallback
-	unsignedCallback     handler.UnsignedCallback
-	middlewares          []Middleware
-	shedder              load.Shedder
-	priorityShedder      load.Shedder
+	conf                 RestConf							// 配置
+	routes               []featuredRoutes					// 路由
+	unauthorizedCallback handler.UnauthorizedCallback		// 未认证回调
+	unsignedCallback     handler.UnsignedCallback			// 未签名回调
+	middlewares          []Middleware						// 中间件
+	shedder              load.Shedder						// 限流器
+	priorityShedder      load.Shedder						// 优先限流器，这个名字有点奇怪，(CpuThreshold + topCpuUsage)/2
 }
 
 func newEngine(c RestConf) *engine {

@@ -6,7 +6,7 @@ Etcd:
   Hosts:
   - 127.0.0.1:2379
   Key: transform.rpc
-DataSource: root:tangke@tcp(192.168.7.154:3306)/gozero
+DataSource: root:tangke@tcp(127.0.0.1:3306)/gozero
 Table: shorturl
 Cache:
-  - Host: 192.168.195.211:6379
+  - Host: 172.24.12.197:6379

@@ -19,11 +19,12 @@ type (
 	RunOption func(*Server)
 
 	Server struct {
-		ngin *engine
-		opts runOptions
+		ngin *engine	// rest api 服务器实现
+		opts runOptions	// 配置选项
 	}
 )
 
+// MustNewServer 创建rest api 服务器
 func MustNewServer(c RestConf, opts ...RunOption) *Server {
 	engine, err := NewServer(c, opts...)
 	if err != nil {

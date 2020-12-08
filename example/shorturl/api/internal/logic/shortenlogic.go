@@ -2,8 +2,6 @@ package logic
 
 import (
 	"context"
-	"time"
-
 	"shorturl/api/internal/svc"
 	"shorturl/api/internal/types"
 	"shorturl/rpc/transform/transformer"
@@ -32,8 +30,6 @@ func (l *ShortenLogic) Shorten(req types.ShortenReq) (*types.ShortenResp, error)
 	if err != nil {
 		return nil, err
 	}
-
-	time.Sleep(time.Second*5)
 
 	return &types.ShortenResp{
 		Shorten: resp.Shorten,
