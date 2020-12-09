@@ -2,7 +2,10 @@ module shorturl
 
 go 1.15
 
-replace google.golang.org/grpc => google.golang.org/grpc v1.29.0
+replace (
+	google.golang.org/grpc => google.golang.org/grpc v1.29.0
+	github.com/tal-tech/go-zero => ../..
+)
 
 require (
 	github.com/golang/mock v1.4.4

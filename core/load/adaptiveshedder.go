@@ -100,6 +100,7 @@ func NewAdaptiveShedder(opts ...ShedderOption) Shedder {
 	}
 }
 
+// 判断请求是否允许通过
 func (as *adaptiveShedder) Allow() (Promise, error) {
 	if as.shouldDrop() {
 		as.dropTime.Set(timex.Now())

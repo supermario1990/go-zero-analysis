@@ -20,7 +20,7 @@ type (
 
 	Server struct {
 		ngin *engine	// rest api 服务器实现
-		opts runOptions	// 配置选项
+		opts runOptions	// 配置选项，但实际却是一个函数，会让人困惑，去掉比较好。如果一定要实现start方法，用interface来约束
 	}
 )
 
@@ -59,6 +59,7 @@ func NewServer(c RestConf, opts ...RunOption) (*Server, error) {
 	return server, nil
 }
 
+// 添加多个路由
 func (e *Server) AddRoutes(rs []Route, opts ...RouteOption) {
 	r := featuredRoutes{
 		routes: rs,
@@ -69,18 +70,22 @@ func (e *Server) AddRoutes(rs []Route, opts ...RouteOption) {
 	e.ngin.AddRoutes(r)
 }
 
+// 添加单个路由
 func (e *Server) AddRoute(r Route, opts ...RouteOption) {
 	e.AddRoutes([]Route{r}, opts...)
 }
 
+// 启动rest api服务器
 func (e *Server) Start() {
 	handleError(e.opts.start(e.ngin))
 }
 
+// 停止rest api服务器
 func (e *Server) Stop() {
 	logx.Close()
 }
 
+// 添加中间件
 func (e *Server) Use(middleware Middleware) {
 	e.ngin.use(middleware)
 }

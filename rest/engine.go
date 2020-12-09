@@ -29,7 +29,7 @@ type engine struct {
 	unsignedCallback     handler.UnsignedCallback			// 未签名回调
 	middlewares          []Middleware						// 中间件
 	shedder              load.Shedder						// 限流器
-	priorityShedder      load.Shedder						// 优先限流器，这个名字有点奇怪，(CpuThreshold + topCpuUsage)/2
+	priorityShedder      load.Shedder						// 优先限流器，这个名字有点奇怪，CpuThreshold = (CpuThreshold + topCpuUsage)/2
 }
 
 func newEngine(c RestConf) *engine {
