@@ -9,4 +9,4 @@ Etcd:
 DataSource: root:tangke@tcp(127.0.0.1:3306)/gozero
 Table: shorturl
 Cache:
-  - Host: 172.24.12.197:6379
+  - Host: 172.26.4.184:6379

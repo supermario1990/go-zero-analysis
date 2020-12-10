@@ -1,3 +1,4 @@
+// 使用二叉查找树来实现路由查找
 package search
 
 import "errors"
@@ -31,7 +32,7 @@ type (
 		// 元素, handler
 		item     interface{}
 		// 孩子节点, key 为'/'分割的字符串， value为孩子节点
-		// 0 存储
+		// 0 存储一般节点/ 1 存储带冒号节点:
 		children [2]map[string]*node
 	}
 

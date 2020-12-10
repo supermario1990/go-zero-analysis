@@ -1,3 +1,4 @@
+// 实现路由管理相关功能
 package router
 
 import (
@@ -94,6 +95,8 @@ func (pr *patRouter) handleNotFound(w http.ResponseWriter, r *http.Request) {
 	}
 }
 
+// 返回允许的方法，header中的allow字段
+// 这个方法的名字有点儿奇葩，应该改为methodAllowed
 func (pr *patRouter) methodNotAllowed(method, path string) (string, bool) {
 	var allows []string
 
@@ -115,6 +118,7 @@ func (pr *patRouter) methodNotAllowed(method, path string) (string, bool) {
 	}
 }
 
+// 支持get/post/put/delete/head/patch/options 7种方法
 func validMethod(method string) bool {
 	return method == http.MethodDelete || method == http.MethodGet ||
 		method == http.MethodHead || method == http.MethodOptions ||

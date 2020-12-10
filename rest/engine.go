@@ -106,11 +106,18 @@ func (s *engine) bindFeaturedRoutes(router httpx.Router, fr featuredRoutes, metr
 
 func (s *engine) bindRoute(fr featuredRoutes, router httpx.Router, metrics *stat.Metrics,
 	route Route, verifier func(chain alice.Chain) alice.Chain) error {
+
+	// rest服务自动添加的中间件
 	chain := alice.New(
+		// 链路追踪
 		handler.TracingHandler,
+		// 日志，用来记录http信息，包括响应code、uri、请求地址、耗时等
 		s.getLogHandler(),
+		// 默认同时最大支持10000个请求, 内部使用chan实现, 比较简单
 		handler.MaxConns(s.conf.MaxConns),
+		// 断路器
 		handler.BreakerHandler(route.Method, route.Path, metrics),
+		// 自适应限流
 		handler.SheddingHandler(s.getShedder(fr.priority), metrics),
 		handler.TimeoutHandler(time.Duration(s.conf.Timeout)*time.Millisecond),
 		handler.RecoverHandler,
@@ -119,8 +126,11 @@ func (s *engine) bindRoute(fr featuredRoutes, router httpx.Router, metrics *stat
 		handler.MaxBytesHandler(s.conf.MaxBytes),
 		handler.GunzipHandler,
 	)
+
+	// 添加认证中间件
 	chain = s.appendAuthHandler(fr, chain, verifier)
 
+	// 添加自定义的中间件
 	for _, middleware := range s.middlewares {
 		chain = chain.Append(convertMiddleware(middleware))
 	}

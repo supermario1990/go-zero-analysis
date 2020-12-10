@@ -17,6 +17,11 @@ func RegisterHandlers(engine *rest.Server, serverCtx *svc.ServiceContext) {
 			Handler: shortenHandler(serverCtx),
 		},
 		{
+			Method:  http.MethodPost,
+			Path:    "/shorten",
+			Handler: shortenHandler(serverCtx),
+		},
+		{
 			Method:  http.MethodGet,
 			Path:    "/expand",
 			Handler: expandHandler(serverCtx),
