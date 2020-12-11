@@ -106,6 +106,8 @@ func (s *Span) forkSpanId() string {
 	return fmt.Sprintf("%s.%d", s.ctx.spanId, s.children)
 }
 
+// 在spanid字符串后面加一个id
+// 比如 0.1 => 0.1.2
 func (s *Span) followSpanId() string {
 	fields := strings.FieldsFunc(s.ctx.spanId, func(r rune) bool {
 		return r == spanSepRune
