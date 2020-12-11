@@ -115,10 +115,11 @@ func (s *engine) bindRoute(fr featuredRoutes, router httpx.Router, metrics *stat
 		s.getLogHandler(),
 		// 默认同时最大支持10000个请求, 内部使用chan实现, 比较简单
 		handler.MaxConns(s.conf.MaxConns),
-		// 断路器
+		// 断路器，使用google SRE 客户端侧节流算法
 		handler.BreakerHandler(route.Method, route.Path, metrics),
 		// 自适应限流
 		handler.SheddingHandler(s.getShedder(fr.priority), metrics),
+		// 超时中间件，默认3秒
 		handler.TimeoutHandler(time.Duration(s.conf.Timeout)*time.Millisecond),
 		handler.RecoverHandler,
 		handler.MetricHandler(metrics),

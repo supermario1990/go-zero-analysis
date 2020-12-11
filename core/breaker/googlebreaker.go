@@ -34,6 +34,9 @@ func newGoogleBreaker() *googleBreaker {
 	}
 }
 
+// google SRE 客户端侧节流算法
+// 1. 可以保持比较稳定的请求速率
+// 2. 后端状态能更快的传导到客户端
 func (b *googleBreaker) accept() error {
 	accepts, total := b.history()
 	weightedAccepts := b.k * float64(accepts)
@@ -94,6 +97,8 @@ func (b *googleBreaker) markFailure() {
 	b.stat.Add(0)
 }
 
+// accepts 成功的请求数
+// total 总请求数
 func (b *googleBreaker) history() (accepts int64, total int64) {
 	b.stat.Reduce(func(b *collection.Bucket) {
 		accepts += int64(b.Sum)
