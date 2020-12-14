@@ -137,6 +137,7 @@ func (s *engine) bindRoute(fr featuredRoutes, router httpx.Router, metrics *stat
 	}
 	handle := chain.ThenFunc(route.Handler)
 
+	// Handle 注册路由
 	return router.Handle(route.Method, route.Path, handle)
 }
 
