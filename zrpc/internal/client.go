@@ -56,14 +56,15 @@ func (c *client) buildDialOptions(opts ...ClientOption) []grpc.DialOption {
 	}
 
 	options := []grpc.DialOption{
-		grpc.WithInsecure(),
-		grpc.WithBlock(),
+		grpc.WithInsecure(),	// 不使用TLS
+		grpc.WithBlock(),		// 阻塞，直到连上服务
+		// 一元拦截器
 		WithUnaryClientInterceptors(
-			clientinterceptors.TracingInterceptor,
-			clientinterceptors.DurationInterceptor,
-			clientinterceptors.BreakerInterceptor,
-			clientinterceptors.PrometheusInterceptor,
-			clientinterceptors.TimeoutInterceptor(cliOpts.Timeout),
+			clientinterceptors.TracingInterceptor,						// tracing, 链路追踪
+			clientinterceptors.DurationInterceptor,						// 日志
+			clientinterceptors.BreakerInterceptor,						// 短路器
+			clientinterceptors.PrometheusInterceptor,					// 监控
+			clientinterceptors.TimeoutInterceptor(cliOpts.Timeout),		// 超时
 		),
 	}
 

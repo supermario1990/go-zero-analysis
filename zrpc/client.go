@@ -39,12 +39,15 @@ func MustNewClient(c RpcClientConf, options ...ClientOption) Client {
 
 func NewClient(c RpcClientConf, options ...ClientOption) (Client, error) {
 	var opts []ClientOption
+
+	// 认证
 	if c.HasCredential() {
 		opts = append(opts, WithDialOption(grpc.WithPerRPCCredentials(&auth.Credential{
 			App:   c.App,
 			Token: c.Token,
 		})))
 	}
+	// 超时时间
 	if c.Timeout > 0 {
 		opts = append(opts, WithTimeout(time.Duration(c.Timeout)*time.Millisecond))
 	}
@@ -53,8 +56,10 @@ func NewClient(c RpcClientConf, options ...ClientOption) (Client, error) {
 	var client Client
 	var err error
 	if len(c.Endpoints) > 0 {
+		// 直接连接grpc server，不通过ETCD
 		client, err = internal.NewClient(internal.BuildDirectTarget(c.Endpoints), opts...)
 	} else if err = c.Etcd.Validate(); err == nil {
+		// 通过ETCD发现服务
 		client, err = internal.NewClient(internal.BuildDiscovTarget(c.Etcd.Hosts, c.Etcd.Key), opts...)
 	}
 	if err != nil {
